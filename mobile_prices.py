@@ -1,9 +1,7 @@
 import pandas as pd
 
-# Assuming you have the CSV file path as 'your_file_path.csv'
 data = pd.read_csv("Mobile Price.csv")
 
-# Display the first few rows of the dataframe to confirm it's loaded correctly
 print(data.head())
 
 
@@ -14,14 +12,10 @@ print(data.head())
 data["resolution"] = data["px_height"] * data["px_width"]
 
 # Add the DPI_w column (assuming 'sc_w' is the screen width in inches)
-data["DPI_w"] = data["px_width"] / data["sc_w"].replace(
-    0, 1
-)  # Replace 0 with 1 to avoid division by zero
+data["DPI_w"] = data["px_width"] / data["sc_w"].replace(0, 1)
 
 # Add the call_ratio column
-data["call_ratio"] = data["battery_power"] / data["talk_time"].replace(
-    0, 1
-)  # Replace 0 with 1 to avoid division by zero
+data["call_ratio"] = data["battery_power"] / data["talk_time"].replace(0, 1)
 
 # Convert memory from MB to GB
 data["memory"] = data["memory"] / 1024
@@ -62,17 +56,13 @@ print(most_expensive_phone)
 # Pivot table for Bluetooth percentage per generation split by RAM quartiles:
 # First, we need to categorize RAM into quartiles
 data["ram_quartile"] = pd.qcut(data["ram"], 4, labels=False)
-# Assuming 'yes'/'no' values or similar, map them to 1/0
 if data["bluetooth"].dtype == "object":
-    data["bluetooth"] = data["bluetooth"].map(
-        {"yes": 1, "no": 0}
-    )  # Adjust keys as per your data
+    data["bluetooth"] = data["bluetooth"].map({"yes": 1, "no": 0})
 
-# If the column is already boolean, convert to int
 data["bluetooth"] = data["bluetooth"].fillna(0).astype(int)
 
 
-# Then, create a pivot table
+# create a pivot table
 pivot_table = pd.pivot_table(
     data,
     values="bluetooth",
